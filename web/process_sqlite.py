@@ -53,15 +53,29 @@ def writeICBPage (row,panddadir):
   icbhtmlfile=open(panddadir+"/icbs/"+row['ModelName']+".html", "w")
   icbhtmlfile.write("<html>\n")
   icbhtmlfile.write("<head>\n")
-  icbhtmlfile.write('<meta http-equiv="Content-type" content="text/html; charset=utf-8">\n')
-  icbhtmlfile.write('<meta name="viewport" content="width=device-width,initial-scale=1">\n')
-  icbhtmlfile.write('<script src="http://molsoft.com/lib/acticm.js"> </script>\n')
   icbhtmlfile.write('<title>'+row['ModelName']+'</title>\n')
   icbhtmlfile.write("</head>\n")
   icbhtmlfile.write("<body>\n")
+  js_config = """<script src="https://unpkg.com/ngl@next"></script>
+<script src="https://cdn.rawgit.com/abradle/zenodo/3a8fdcf6/create_view.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+<script>
+    // Just fix these for each page
+    var data_base = '"""+row['ModelName']+"""'
+    // Not sure if this is correct
+    var lig_sele = "LIG"
+    // The directory to get the zenodo information out from - relative path
+    var zenodo_dir = "../"
+    // Create the views
+   $(document).ready(function() {
+    create_view("viewport",data_base,lig_sele,zenodo_dir);
+   })
+</script>"""
+  icbhtmlfile.write(js_config)
   icbhtmlfile.write("<h2>"+row['CrystalName']+" "+row['CompoundCode']+" event</h2>\n")
-  icbhtmlfile.write('<div id="wait"><h3 style="color:red;">Please wait whilst the interactive viewer is loaded!</h3></div>\n')
-  icbhtmlfile.write('<div id="con" style="width: 800px; height: 600px; border: 2px solid #ABABAB">\n')
+  icbhtmlfile.write("""<div id="viewport" style="width:400px;height:400px"></div>""")
   icbhtmlfile.write('<img id="pdbloader" src="../mapImages/'+row['ModelName']+"_"+row['CompoundCode']+'_large.png" />\n')
 #  icbhtmlfile.write('<img id="pdbloader" src="../mapImages/'+row['ModelName']+'_large.png" />\n')
   icbhtmlfile.write('</div>\n')
@@ -72,18 +86,6 @@ def writeICBPage (row,panddadir):
   icbhtmlfile.write("<td><img src='../compoundImages/"+row['CompoundCode']+".png'></td></tr>\n")
   icbhtmlfile.write("</table>\n")
   icbhtmlfile.write("</div>\n")
-  icbhtmlfile.write('<script>\n')
-  icbhtmlfile.write('function onLoadActiveIcm()\n')
-  icbhtmlfile.write('{\n')
-  icbhtmlfile.write('  act = new ActiveIcmJS("con");\n')
-  icbhtmlfile.write('  act.projectFile = "'+row['ModelName']+'_'+row['CompoundCode']+'.icb";\n')
-#  icbhtmlfile.write('  act.projectFile = "'+row['ModelName']+'_'+row['CompoundCode']+'.icb.gz";\n')
-  icbhtmlfile.write('  act.searchBarVisible = false;\n')
-  icbhtmlfile.write('  act.sequenceViewVisibleAuto = false;\n')
-  icbhtmlfile.write('  act.tableViewVisibleAuto = false;\n')
-  icbhtmlfile.write('  document.getElementById("wait").style.visibility = "hidden";\n')
-  icbhtmlfile.write('}\n')
-  icbhtmlfile.write('</script>\n')
   icbhtmlfile.write("</body>\n")
   icbhtmlfile.write("</html>\n")
   icbhtmlfile.close()
