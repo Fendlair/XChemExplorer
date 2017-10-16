@@ -1,12 +1,12 @@
 # last edited: 10/08/2017, 15:00
 
-import os,glob
+import os,glob,sys
 
 #projectDir='/dls/labxchem/data/2017/lb13385-109/processing/analysis/initial_model_cov'
 #panddaDir='/dls/labxchem/data/2017/lb13385-109/processing/analysis/panddas_cov'
 
 
-def make_links(projectDir,panddaDir)
+def make_links(projectDir,panddaDir):
     os.chdir(os.path.join(panddaDir,'processed_datasets'))
     for xtal in glob.glob('*'):
 #        for cif in glob.glob(os.path.join(xtal,'ligand_files','*.cif')):
